@@ -1,3 +1,11 @@
+
+# dictionary that defines the suffix of the files given the analysis tool
+tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_fht.txt",
+                   "MSGFPlus_DTARefinery"="_msgfdb_fht.txt",
+                   "MASIC_Finnigan"="_ReporterIons.txt")
+                   
+
+
 # Get AScore results for a given data package
 get_AScore_results <- function(dataPkgNumber)
 {
