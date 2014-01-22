@@ -21,3 +21,22 @@ get_AScore_results <- function(dataPkgNumber)
         return(NULL)
     }
 }
+
+
+
+
+get_job_records_by_dataset_package <- function(dataPkgNumber)
+{
+    library(RODBC)
+    con <- odbcDriverConnect("DRIVER={SQL Server};SERVER=gigasax;DATABASE=dms5;")
+    strSQL = sprintf("
+                SELECT *
+                FROM V_Mage_Data_Package_Analysis_Jobs
+                WHERE Data_Package_ID = %s",
+                dataPkgNumber)
+    jr <- sqlQuery(con, strSQL, stringsAsFactors=FALSE)
+    close(con)            
+    return(jr)
+}
+
+
