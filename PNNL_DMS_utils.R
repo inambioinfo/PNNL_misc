@@ -10,10 +10,14 @@ get_AScore_results <- function(dataPkgNumber)
     jobs <- sqlQuery(con, strSQL, stringsAsFactors=FALSE)
     close(con)
     #
-    library("RSQLite")
-    ascoreResultDB <- file.path( jobs["Folder"], "Step_5_Cyclops", "Results.db3")
-    db <- dbConnect(SQLite(), dbname = ascoreResultDB)
-    AScores <- dbGetQuery(db, "SELECT * FROM t_results_ascore")
-    dbDisconnect(db)
-    return(AScores)
+    if(nrow(jobs) == 1){
+        library("RSQLite")
+        ascoreResultDB <- file.path( jobs["Folder"], "Step_5_Cyclops", "Results.db3")
+        db <- dbConnect(SQLite(), dbname = ascoreResultDB)
+        AScores <- dbGetQuery(db, "SELECT * FROM t_results_ascore")
+        dbDisconnect(db)
+        return(AScores)
+    }else{
+        return(NULL)
+    }
 }
