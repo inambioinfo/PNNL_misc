@@ -68,16 +68,16 @@ get_results_for_multiple_jobs = function( jobRecords){
 get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
     pathToFile = list.files( path=as.character(pathToFileLocation), 
                              pattern=fileNamePattern, 
-                             full.names=T, ...)
+                             full.names=T)
     if(length(pathToFile) == 0){
         stop("can't find the results file")
     }
     if(length(pathToFile) > 1){
         stop("ambiguous results files")
     }
-    results = read.delim( pathToFile, header=T, ...)
+    results = read.delim( pathToFile, header=T)
     datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = TRUE, ...)
+    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = TRUE)
     return(out)
 }
 
