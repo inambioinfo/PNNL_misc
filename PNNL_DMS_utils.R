@@ -49,7 +49,7 @@ get_job_records_by_dataset_package <- function(dataPkgNumber)
 
 
 # ... further arguments to read.delim and data.frame functions
-get_results_for_multiple_jobs = function( jobRecords, ... ){
+get_results_for_multiple_jobs = function( jobRecords){
     toolName = unique(jobRecords[["Tool"]])
     if (length(toolName) > 1){
         stop("Contains results of more then one tool.")
@@ -58,7 +58,7 @@ get_results_for_multiple_jobs = function( jobRecords, ... ){
     results = ldply( jobRecords[["Folder"]], 
                      get_results_for_single_job, 
                      fileNamePattern=tool2suffix[[toolName]],
-                    .progress = "text", ...)
+                    .progress = "text")
     return( results )
 }
 
