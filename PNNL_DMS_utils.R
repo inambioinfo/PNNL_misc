@@ -1,3 +1,9 @@
+
+
+
+
+
+
 # dictionary that defines the suffix of the files given the analysis tool
 tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_fht.txt",
                    "MSGFPlus_DTARefinery"="_msgfdb_fht.txt",
@@ -48,7 +54,7 @@ get_job_records_by_dataset_package <- function(dataPkgNumber)
 
 
 
-# ... further arguments to read.delim and data.frame functions
+
 get_results_for_multiple_jobs = function( jobRecords){
     toolName = unique(jobRecords[["Tool"]])
     if (length(toolName) > 1){
@@ -65,6 +71,23 @@ get_results_for_multiple_jobs = function( jobRecords){
 
 
 
+get_results_for_multiple_jobs.dt = function( jobRecords){
+    toolName = unique(jobRecords[["Tool"]])
+    if (length(toolName) > 1){
+        stop("Contains results of more then one tool.")
+    }
+    library("plyr")
+    library("data.table")
+    results = llply( jobRecords[["Folder"]], 
+                     get_results_for_single_job.dt, 
+                     fileNamePattern=tool2suffix[[toolName]],
+                    .progress = "text")
+    results.dt <- rbindlist(results)
+    return( as.data.frame(results.dt) ) # in the future I may keep it as data.table
+}
+
+
+
 get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
     pathToFile = list.files( path=as.character(pathToFileLocation), 
                              pattern=fileNamePattern, 
@@ -75,13 +98,27 @@ get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
     if(length(pathToFile) > 1){
         stop("ambiguous results files")
     }
-    results = read.delim( pathToFile, header=T)
+    results = read.delim( pathToFile, header=T, stringsAsFactors = FALSE)
     datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = TRUE)
+    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = FALSE)
     return(out)
 }
 
-
-
+library("data.table")
+get_results_for_single_job.dt = function(pathToFileLocation, fileNamePattern ){
+    pathToFile = list.files( path=as.character(pathToFileLocation), 
+                             pattern=fileNamePattern, 
+                             full.names=T)
+    if(length(pathToFile) == 0){
+        stop("can't find the results file")
+    }
+    if(length(pathToFile) > 1){
+        stop("ambiguous results files")
+    }
+    results = read.delim( pathToFile, header=T, stringsAsFactors = FALSE)
+    datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
+    out = data.table(DatasetName=datasetName, results)
+    return(out)
+}
 
 
