@@ -77,7 +77,7 @@ get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
     }
     results = read.delim( pathToFile, header=T, ...)
     datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.frame(DatasetName=datasetName, results, ...)
+    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = TRUE, ...)
     return(out)
 }
 
