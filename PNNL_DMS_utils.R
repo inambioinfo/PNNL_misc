@@ -1,4 +1,3 @@
-
 # dictionary that defines the suffix of the files given the analysis tool
 tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_fht.txt",
                    "MSGFPlus_DTARefinery"="_msgfdb_fht.txt",
@@ -49,8 +48,8 @@ get_job_records_by_dataset_package <- function(dataPkgNumber)
 
 
 
-
-get_results_for_multiple_jobs = function( jobRecords ){
+# ... further arguments to read.delim and data.frame functions
+get_results_for_multiple_jobs = function( jobRecords, ... ){
     toolName = unique(jobRecords[["Tool"]])
     if (length(toolName) > 1){
         stop("Contains results of more then one tool.")
@@ -59,7 +58,7 @@ get_results_for_multiple_jobs = function( jobRecords ){
     results = ldply( jobRecords[["Folder"]], 
                      get_results_for_single_job, 
                      fileNamePattern=tool2suffix[[toolName]],
-                    .progress = "text")
+                    .progress = "text", ...)
     return( results )
 }
 
@@ -69,16 +68,16 @@ get_results_for_multiple_jobs = function( jobRecords ){
 get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
     pathToFile = list.files( path=as.character(pathToFileLocation), 
                              pattern=fileNamePattern, 
-                             full.names=T)
+                             full.names=T, ...)
     if(length(pathToFile) == 0){
         stop("can't find the results file")
     }
     if(length(pathToFile) > 1){
         stop("ambiguous results files")
     }
-    results = read.delim( pathToFile, header=T, as.is=TRUE)
+    results = read.delim( pathToFile, header=T, ...)
     datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.frame(DatasetName=datasetName, results, stringsAsFactors=FALSE)
+    out = data.frame(DatasetName=datasetName, results, ...)
     return(out)
 }
 
