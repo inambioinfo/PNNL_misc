@@ -1,7 +1,7 @@
 PNNL_misc
 =========
 
-Miscellaneous utils for dealing with PNNL's proteomics database
+Miscellaneous utils for dealing with PNNL's proteomics database. They won't work if not connected to PNNL's network.
 
 
 using 
