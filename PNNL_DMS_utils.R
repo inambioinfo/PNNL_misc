@@ -1,4 +1,20 @@
 
+library("RODBC")
+
+
+get_server_name_for_mtdb = function( mtdbName )
+# a way to find which server MT DB is located
+{
+    con = odbcDriverConnect("DRIVER={SQL Server};SERVER=Pogo;DATABASE=MTS_Master;")
+    strSQL = sprintf("SELECT Server_Name 
+                      FROM V_MTS_MT_DBs 
+                      WHERE MT_DB_Name = '%s'", mtdbName)
+    dbServer = sqlQuery(con,strSQL)
+    close(con)
+    return(as.character(dbServer[1,1]))
+}
+
+
 
 
 
