@@ -114,8 +114,8 @@ get_results_for_single_job = function(pathToFileLocation, fileNamePattern ){
         stop("ambiguous results files")
     }
     results = read.delim( pathToFile, header=T, stringsAsFactors = FALSE)
-    datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.frame(DatasetName=datasetName, results, stringsAsFactors = FALSE)
+    dataset = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
+    out = data.frame(Dataset=dataset, results, stringsAsFactors = FALSE)
     return(out)
 }
 
