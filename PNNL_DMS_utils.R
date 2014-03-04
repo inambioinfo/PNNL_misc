@@ -1,4 +1,3 @@
-
 library("RODBC")
 
 
@@ -132,8 +131,8 @@ get_results_for_single_job.dt = function(pathToFileLocation, fileNamePattern ){
         stop("ambiguous results files")
     }
     results = read.delim( pathToFile, header=T, stringsAsFactors = FALSE)
-    datasetName = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
-    out = data.table(DatasetName=datasetName, results)
+    dataset = strsplit( basename(pathToFile), split=fileNamePattern)[[1]]
+    out = data.table(Dataset=dataset, results)
     return(out)
 }
 
