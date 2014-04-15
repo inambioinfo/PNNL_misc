@@ -86,6 +86,39 @@ get_dms_job_records = function(
 
 
 
+
+get_tool_output_files_for_job_number <- function(jobNumber, toolName, 
+                                                 filePattern, mostRecent=TRUE)
+{
+    # get job records first. This will be useful to get datasetfolder
+    jobRecord = get_dms_job_records(jobNumber)
+    datasetFolder = dirname( as.character(jobRecord$Folder))
+    
+    # get tool's subfolder
+    if( is.null(toolName) ){
+        toolFolder = ''
+    }else{
+        # return stuff from the main dataset folder
+        toolFolder = get_output_folder_for_job_and_tool(jobNumber, toolName, mostRecent)
+    }
+    #
+    candidateFiles = list.files(file.path(datasetFolder, toolFolder), 
+                                pattern=filePattern, full.names=TRUE,
+                                ignore.case=TRUE)        
+    #
+    if(length(candidateFiles) == 1){
+        return(candidateFiles)
+    }else{
+        return(NA)
+    }
+}
+
+
+
+
+
+
+
 # Get AScore results for a given data package
 get_AScore_results <- function(dataPkgNumber)
 {
