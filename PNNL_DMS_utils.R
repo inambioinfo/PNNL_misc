@@ -26,6 +26,66 @@ tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_fht.txt",
                    
 
 
+get_dms_job_records = function(
+                                jobs = NULL,
+                                datasetPttrn = "",
+                                experimentPttrn = "",
+                                toolPttrn = "",
+                                parPttrn = "",
+                                settingsPttrn = "",
+                                fastaPttrn = "",
+                                proteinOptionsPttrn = "",
+                                intrumentPttrn = ""){
+    
+    # first check if the input is valid
+    x = as.list(environment())
+    x[["jobs"]] = NULL
+    if( all(x == "") & is.null(jobs) ){
+        stop("insufficients arguments provided")
+    }
+    if( any(x != "") & !is.null(jobs) ){
+        stop("can't provide both: job list and search terms")
+    }
+    
+    # initialize connection
+    library(RODBC)
+    con <- odbcDriverConnect("DRIVER={SQL Server};SERVER=gigasax;DATABASE=dms5;")
+    
+    # set-up query based on job list
+    if(!is.null(jobs)){
+        strSQL = sprintf("SELECT * 
+                          FROM V_Mage_Analysis_Jobs 
+                          WHERE [Job] IN ('%s')
+                          ", 
+                            paste(jobs,sep="",collapse="',\n'"))
+    }else{
+        strSQL = sprintf("SELECT * 
+                          FROM V_Mage_Analysis_Jobs 
+                          WHERE [Dataset] LIKE '%%%s%%'
+                          AND [Experiment] LIKE '%%%s%%'
+                          AND [Tool] LIKE '%%%s%%'                      
+                          AND [Parameter_File] LIKE '%%%s%%'
+                          AND [Settings_File] LIKE '%%%s%%'
+                          AND [Protein Collection List] LIKE '%%%s%%'
+                          AND [Protein Options] LIKE '%%%s%%'
+                          AND [Instrument] LIKE '%%%s%%'
+                          ", 
+                            datasetPttrn,
+                            experimentPttrn,
+                            toolPttrn,
+                            parPttrn,
+                            settingsPttrn,
+                            fastaPttrn,
+                            proteinOptionsPttrn,
+                            intrumentPttrn)
+    }
+    locationPointersToMSMSjobs = sqlQuery(con, strSQL, stringsAsFactors=FALSE)
+    close(con)
+    return(locationPointersToMSMSjobs)
+}
+
+
+
 # Get AScore results for a given data package
 get_AScore_results <- function(dataPkgNumber)
 {
