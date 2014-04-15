@@ -115,6 +115,20 @@ get_tool_output_files_for_job_number <- function(jobNumber, toolName,
 
 
 
+get_output_folder_for_job_and_tool = function(jobNumber, toolName, mostRecent=TRUE)
+{
+    con = odbcDriverConnect("DRIVER={SQL Server};SERVER=Gigasax;DATABASE=DMS_Pipeline;")
+    strSQLPattern = "SELECT Output_Folder
+                     FROM V_Job_Steps_History
+                     WHERE (Job = %s) AND (Tool = '%s') AND (Most_Recent_Entry = 1)"
+    strSQL = sprintf( strSQLPattern, jobNumber, toolName)
+    qry = sqlQuery(con, strSQL)
+    close(con)
+    return(as.character(qry[1,1]))
+}
+# get_output_folder_for_job_and_tool(863951, "DTA_Refinery") 
+
+
 
 
 
