@@ -115,7 +115,7 @@ get_tool_output_files_for_job_number <- function(jobNumber, toolName,
 
 
 
-get_output_folder_for_job_and_tool = function(jobNumber, toolName, mostRecent=TRUE)
+get_output_folder_for_job_and_tool <- function(jobNumber, toolName, mostRecent=TRUE)
 {
     con = odbcDriverConnect("DRIVER={SQL Server};SERVER=Gigasax;DATABASE=DMS_Pipeline;")
     strSQLPattern = "SELECT Output_Folder
