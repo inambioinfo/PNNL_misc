@@ -147,7 +147,9 @@ get_AScore_results <- function(dataPkgNumber)
     #
     if(nrow(jobs) == 1){
         library("RSQLite")
-        ascoreResultDB <- file.path( jobs["Folder"], "Step_5_Cyclops", "Results.db3")
+        dlist <- dir(as.character(jobs["Folder"]))
+        idx <- which.max(as.numeric(sub("Step_(\\d+)_.*", "\\1", dlist))) # the Results supposed to be in the last folder
+        ascoreResultDB <- file.path( jobs["Folder"], dlist[idx], "Results.db3")
         db <- dbConnect(SQLite(), dbname = ascoreResultDB)
         AScores <- dbGetQuery(db, "SELECT * FROM t_results_ascore")
         dbDisconnect(db)
