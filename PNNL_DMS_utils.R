@@ -20,8 +20,8 @@ get_server_name_for_mtdb = function( mtdbName )
 
 
 # dictionary that defines the suffix of the files given the analysis tool
-tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_fht.txt",
-                   "MSGFPlus_DTARefinery"="_msgfdb_fht.txt",
+tool2suffix = list("MSGFDB_DTARefinery"="_msgfdb_syn.txt",
+                   "MSGFPlus_DTARefinery"="_msgfdb_syn.txt",
                    "MASIC_Finnigan"="_ReporterIons.txt")
                    
 
